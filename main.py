@@ -1,4 +1,5 @@
 import CoiledCoil
+import SASA
 import Sequence
 import Chain
 import CCSocket
@@ -25,6 +26,9 @@ if "SOLVENTRADIUS" not in os.environ:
                 sRadius = num
             except ValueError:
                 print("Invalid input. Must input a numerical value")
+        userSelection = input("Set " + str(sRadius) + " as environment variable SOLVENTRADIUS? [y/n]")
+        if userSelection == "y":
+            os.environ['SOLVENTRADIUS'] = str(sRadius)
 else:
     try:
         sRadius = float(os.environ['SOLVENTRADIUS'])
@@ -35,6 +39,38 @@ else:
             try:
                 num = float(input("Input solvent radius (Å)"))
                 sRadius = num
+                userSelection = input("Set " + str(sRadius) + " as environment variable SOLVENTRADIUS? [y/n]")
+                if userSelection == "y":
+                    os.environ['SOLVENTRADIUS'] = str(sRadius)
+            except ValueError:
+                print("Invalid input. Must input a numerical value")
+
+#Establish solvent radius
+if "NUMFIBPOINTS" not in os.environ:
+    userSelection = input("Number of Fibonacci points is not set. Please input desired number of points.")
+    while True:
+        try:
+            numPoints = int(userSelection)
+            break
+        except ValueError:
+            userSelection = input("Invalid input. Must input a numerical value")
+
+    userSelection = input("Set " + str(numPoints) + " as environment variable NUMFIBPOINTS? [y/n]")
+    if userSelection == "y":
+        os.environ['NUMFIBPOINTS'] = str(numPoints)
+else:
+    try:
+        numPoints = int(os.environ['NUMFIBPOINTS'])
+    except ValueError:
+        print("Environment variable NUMFIBPOINTS is not set to a numerical value.")
+        numPoints = "a"
+        while numPoints == "a":
+            try:
+                num = int(input("Input desired number of points"))
+                numPoints = num
+                userSelection = input("Set " + str(numPoints) + " as environment variable NUMFIBPOINTS? [y/n]")
+                if userSelection == "y":
+                    os.environ['NUMFIBPOINTS'] = str(sRadius)
             except ValueError:
                 print("Invalid input. Must input a numerical value")
 
@@ -126,6 +162,8 @@ try:
         socket_info.ParseSocket(f_s)
         #Get ranges of each helix
         cCoil = CoiledCoil.CoiledCoil(seqChains, socket_info)
+        sasa = SASA.SASA()
+        sasa.GetSASA(cCoil.GetccAtoms(), numPoints, sRadius)
 
         #Output information to write file
         outfile = open(ntpath.basename(f_p.name) + ".csv", "w")

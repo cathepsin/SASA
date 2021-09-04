@@ -4,6 +4,9 @@ class CoiledCoil:
         for info in sock_info.sock_info:
             self.GetIncludedResidues(chains, info)
 
+    def GetccAtoms(self):
+        return self.ccAtoms
+
     def GetIncludedResidues(self, chains, sock_info):
         chain = chains.chains[sock_info[0]]
         for i in range(sock_info[1][0], sock_info[1][1] + 1):
