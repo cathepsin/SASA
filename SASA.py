@@ -1,3 +1,5 @@
+import CustomExceptions
+
 class SASA:
     def __init__(self):
         self.SASA = 0
@@ -144,4 +146,9 @@ class SASA:
                     retList.append('OthC')
                 else:
                     retList.append('nonArC')
+            else:
+                retList.append("Placeholder")
+                raise CustomExceptions.UnknownAtom
+        #TODO Check that all atoms have a label
+
         return retList

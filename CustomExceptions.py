@@ -4,3 +4,10 @@ class NotDirectory(Exception):
 
     def __str__(self):
         return self.message
+
+class UnknownAtom(Exception):
+    def __init__(self):
+        self.message = "An atom was not recognized"
+
+    def __str__(self):
+        return self.message
