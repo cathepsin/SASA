@@ -5,17 +5,38 @@ import CCSocket
 import filemanager
 import CustomExceptions
 import writefile
-
 import sys
 import os
 import ntpath
 import signal
-
-
-
 import FPTools as fpt
 
-
+#Establish solvent radius
+if "SOLVENTRADIUS" not in os.environ:
+    userSelection = input("Solvent radius is not set. "
+                                        "Use radius of water? (1.4Å) [y/n]")
+    if userSelection == "y":
+        sRadius = 1.4
+    else:
+        sRadius = "a"
+        while sRadius == "a":
+            try:
+                num = float(input("Input solvent radius (Å)"))
+                sRadius = num
+            except ValueError:
+                print("Invalid input. Must input a numerical value")
+else:
+    try:
+        sRadius = float(os.environ['SOLVENTRADIUS'])
+    except ValueError:
+        print("Environment variable SOLVENTRADIUS is not set to a numerical value.")
+        sRadius = "a"
+        while sRadius == "a":
+            try:
+                num = float(input("Input solvent radius (Å)"))
+                sRadius = num
+            except ValueError:
+                print("Invalid input. Must input a numerical value")
 
 #Check file. Return true if correct file extension
 ACCEPTED_EXTENSIONS = [".mmol", ".ent", "pdb", ".short.socket"]
@@ -105,7 +126,6 @@ try:
         socket_info.ParseSocket(f_s)
         #Get ranges of each helix
         cCoil = CoiledCoil.CoiledCoil(seqChains, socket_info)
-        print(os.environ['SOLVENTRADIUS'])
 
         #Output information to write file
         outfile = open(ntpath.basename(f_p.name) + ".csv", "w")
