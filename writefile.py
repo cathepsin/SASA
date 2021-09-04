@@ -1,8 +1,7 @@
 import ntpath
 import os
 
-import EGDist
-import HeptadRepeat
+import CCSocket
 
 
 class FileWriter:
@@ -23,7 +22,7 @@ class FileWriter:
     #Write all data to a file from given argv. Fill summary
     def writeFile(self):
         egdist = EGDist.EGDist()
-        heptad = HeptadRepeat.Heptad()
+        heptad = CCSocket.Heptad()
         errorMessage = ""
         for clss in self.arg:
             errorMessage += clss.message
