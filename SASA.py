@@ -3,7 +3,7 @@ import CustomExceptions
 class SASA:
     def __init__(self):
         self.SASA = 0
-        self.RADIUS_MAP - {
+        self.RADIUS_MAP = {
             "N": 1.5,
             "O": 1.4,
             "S": 1.85,
@@ -20,14 +20,30 @@ class SASA:
     def GetSASA(self, structure, n, solvent_radius):
         self.n = n
         self.solvent_radius = solvent_radius
-        cf = self.GetClassifications()
+        cf = list()
+        for residue in structure:
+            for atom in residue.atoms:
+                cf.append(dict())
+                cf[-1]['Classification'] = (self.GetClassifications(atom))
+                cf[-1]['Radius'] = (self.RADIUS_MAP[cf[-1][1]] + solvent_radius)
+                cf[-1]['Sphere'] = (self.DrawSphere(n, atom))
         print("stub!")
 
     def DefineSphere(self):
         print("stub")
 
-    def DrawSphere(self):
-        print("stub")
+    def DrawSphere(self, n, atom):
+        #TODO Make work with variable radius
+        # Thanks to user 'CR Drost' from https://stackoverflow.com/questions/9600801/evenly-distributing-n-points-on-a-sphere
+        from numpy import pi, cos, sin, arccos, arange
+        indices = arange(0, n, dtype=float)
+        phi = arccos(1 - 2 * indices / n)
+        theta = pi * (1 + 5 ** 0.5) * indices
+        x, y, z = cos(theta) * sin(phi), sin(theta) * sin(phi), cos(phi);
+        points = list()
+        for val in range(len(x)):
+            points.append([x[val] + atom.location[0], y[val] + atom.location[1], z[val] + atom.location[2]])
+        return points
 
     def RemoveClosePoints(self):
         print("stub")
@@ -37,13 +53,14 @@ class SASA:
 
     def GetClassifications(self, atom):
         retList = list()
-        if atom.element == "N":
+        retList.append(atom)
+        if atom.element == "N" or atom.id.find("N") != -1:
             retList.append('N')
-        elif atom.element == "O":
+        elif atom.element == "O" or atom.id.find("O") != -1:
             retList.append('O')
-        elif atom.element == "S":
+        elif atom.element == "S" or atom.id.find("S") != -1:
             retList.append('S')
-        elif atom.element.upper() == "ZN":
+        elif atom.element.upper() == "ZN" or atom.id.upper().find("ZN") != -1:
             retList.append('Zn')
         elif atom.id == "C":
             retList.append('OthC')
