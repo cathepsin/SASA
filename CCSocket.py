@@ -25,7 +25,7 @@ class CCSocket:
             "O": 'PYL'
         }
         self.message = ""
-        self.oligomeric_state = "Unknown"
+        self.oligomeric_states = list()
         self.sock_info = []
 
     #Parse a .short.socket file to extract information about a heptad repeat
@@ -34,13 +34,12 @@ class CCSocket:
         i = 0
         while i < len(rFile):
             #Get oligomeric state from .short.socket file. Gets only first instance of described oligomeric state
-            if rFile[i].find("stranded") != -1 and self.oligomeric_state == "Unknown":
-                for word in rFile[i].split():
-                    if word.find("stranded") != -1:
-                        self.oligomeric_state = word
-                        for i in range(len(self.oligomeric_state)):
-                            if not self.oligomeric_state[i].isalnum():
-                                self.oligomeric_state = self.oligomeric_state[:i] + " " + self.oligomeric_state[i + 1:]
+            if rFile[i].find("stranded") != -1:
+                if rFile[i].find("(") != -1:
+                    splt = rFile[i].split()
+                    for str in splt:
+                        if str.find("stranded") != -1:
+                            self.oligomeric_states.append(self.DeclarationToNum(str.replace('-',' ',1)))
             if rFile[i].find("assigning heptad to helix") == 0:
                 paragraph = ""
                 while rFile[i] != "\n":
@@ -71,13 +70,21 @@ class CCSocket:
         register = lines[3].split()[1]
         if chain == str(range[1]):#If socket file was produced from pdf file with missing chain labels
             chain = "$"
-        return chain, range, sequence, register
+        return [chain, range, sequence, register]
 
     #AminoAcids getter
     def GetList(self):
         return self.AAs
 
-#Convert one-letter code to three-letter code. Note this is defined outside of the class
-def OneToThree(AA):
-    object = Heptad()
-    return object.GetList()[AA]
+    def DeclarationToNum(self, str):
+        return [int(i) for i in str.split() if i.isdigit() ][0]
+
+    def GroupSockInfo(self):
+        self.groupData = list()
+        index = 0
+        for state in self.oligomeric_states:
+            newList = list()
+            for i in range(state):
+                newList.append(self.sock_info[index])
+                index += 1
+            self.groupData.append(newList)

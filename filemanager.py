@@ -17,12 +17,12 @@ def Organize():
 
 #If provided two files using the -file flag
 def TwoFiles(f1, f2):
-    if not os.path.isdir(f1[:f1.rfind(".")] + " eg-dist"):
-        os.mkdir(f1[:f1.rfind(".")] + " eg-dist")
-    os.chdir(os.path.join(os.getcwd(), f1[:f1.rfind(".")] + " eg-dist"))
+    if not os.path.isdir(f1[:f1.rfind(".")] + " SASA"):
+        os.mkdir(f1[:f1.rfind(".")] + " SASA")
+    os.chdir(os.path.join(os.getcwd(), f1[:f1.rfind(".")] + " SASA"))
     if not os.path.isfile(os.path.basename(f1)):
         shutil.copy(f1, os.getcwd())
     if not os.path.isfile(os.path.basename(f2)):
         shutil.copy(f2, os.getcwd())
     os.chdir("..")
-    return f1[:f1.rfind(".")] + " eg-dist"
+    return f1[:f1.rfind(".")] + " SASA"

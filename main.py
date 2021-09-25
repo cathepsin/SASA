@@ -160,15 +160,36 @@ try:
         #Get socket file and make heptad assignings
         socket_info = CCSocket.CCSocket()
         socket_info.ParseSocket(f_s)
+        socket_info.GroupSockInfo()
         #Get ranges of each helix
-        cCoil = CoiledCoil.CoiledCoil(seqChains, socket_info)
-        sasa = SASA.SASA()
-        sasa.GetSASA(cCoil.GetccAtoms(), numPoints, sRadius)
-
-        #Output information to write file
+        # Output information to write file
         outfile = open(ntpath.basename(f_p.name) + ".csv", "w")
-        filewriter.SetWriteFile(outfile)
-        filewriter.writeFile()
+        outfile.write(f"SASA Data from {ntpath.basename(f_p.name)} and {ntpath.basename(f_s.name)}\n")
+        outfile.write(f"This protein contains {len(socket_info.groupData)} coiled coils\n")
+        filewriter.writeSummary()
+        index = 1
+        for si in socket_info.groupData:
+            outfile.write(f"Coiled coil {index}: contains {len(si)} monomers,{len(si)}\n")
+            cCoil = CoiledCoil.CoiledCoil(seqChains, si)
+            sasa = SASA.SASA()
+            #pSASA = sasa.GetSASA(protSeq.sequence, numPoints, sRadius)
+            cCoilSASA = sasa.GetSASA(cCoil.GetccAtoms(), numPoints, sRadius)
+            outfile.write(f"\n ,SASA,% of struture,# of residues\nCoiled-coil SASA, {cCoilSASA},{len(cCoil.GetccAtoms())}\n")
+            sasa.SetSASA(cCoilSASA)
+            monomerSASAs = list()
+            monomerPcnt = list()
+            monIndex = 1
+            for monomer in cCoil.monomers:
+                monSASA, monPct = sasa.SASASection(monomer, cCoil.GetccAtoms(), numPoints, sRadius)
+                monomerSASAs.append(monSASA)
+                monomerPcnt.append(monPct)
+                outfile.write(f"Monomer {monIndex}, {monomerSASAs[-1]}, {monomerPcnt[-1] * 100}%, {len(monomer)}\n")
+                #print(f"Monomer {monIndex}: {monomerSASAs[-1]}A {monomerPcnt[-1] * 100}% of the structure")
+                monIndex += 1
+            index += 1
+
+
+        #filewriter.writeFile()
         outfile.close()
         os.chdir("..")
 
