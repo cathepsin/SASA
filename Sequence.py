@@ -1,5 +1,4 @@
 import numpy as np
-from string import ascii_letters
 
 class ProteinSequence:
     def __init__(self):
@@ -36,10 +35,14 @@ class ProteinSequence:
             self.num = numb
             self.atoms = atomList
             self.residue = cName
+            if len(cName) == 4:
+                self.residue = cName[1:]
+
             self.chain = ch
             self.rotation = dict()
             self.SetSpecials()
             self.assignment = 'none'
+
 
         #Organizes special atoms and residues with non-1 occupancy
         def SetSpecials(self):

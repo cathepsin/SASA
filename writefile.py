@@ -22,6 +22,6 @@ class FileWriter:
             self.summary += "\n"
 
     #Write to master csv file
-    def WriteMaster(self, num):
-        self.master.write(f"Master summery for {num} proteins\n")
+    def WriteMaster(self, num, writer):
+        self.master.write(writer.WriteData(num))
         print("")

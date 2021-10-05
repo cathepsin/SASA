@@ -1,7 +1,4 @@
 import math
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import multiprocessing
 
 import CustomExceptions
 
@@ -75,6 +72,8 @@ class SASA:
 
         SASA = 0
         for atom in allSectionAtoms:
+            #TODO Kill hydrogen atoms!
+
             # x = self.GetClassifications(atom)
             # print(self.RADIUS_MAP[self.GetClassifications(atom)])
             sphere = self.GenerateSphere(n, atom, self.RADIUS_MAP[self.GetClassifications(atom)] + solvent_radius)
@@ -130,6 +129,8 @@ class SASA:
     def GetCloseAtoms(self, atom, atomList, solvent_radius):
         retlist = list()
         for a in [a for a in atomList if a != atom]:
+            if self.GetClassifications(atom) == "Placeholder":
+                continue
             if self.dist(atom.location, a.location) < self.RADIUS_MAP[self.GetClassifications(atom)] + self.RADIUS_MAP[self.GetClassifications(a)] + 2.5 * solvent_radius:
                 retlist.append(a)
         return retlist

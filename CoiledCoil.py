@@ -17,11 +17,24 @@ class CoiledCoil:
         for i in range(sock_info[1][0], sock_info[1][1] + 1):
             try:
                 if chain[i] not in set(self.ccAtoms) and sock_info[3][i - sock_info[1][0]] != '-':
-                    self.ccAtoms.append(chain[i])
-                    currMonomer.append(chain[i])
+                    noHRes = self.RemoveHydrogen(chain[i])
+                    self.ccAtoms.append(noHRes)
+                    currMonomer.append(noHRes)
             except IndexError:
                 continue
             except KeyError:
                 continue
         self.monomers.append(currMonomer)
+
+    def RemoveHydrogen(self, residue):
+        retRes = list()
+        for atom in residue.atoms:
+            if atom.element == "H":
+                continue
+            else:
+                for char in atom.id:
+                    if char.isalpha() and char != "H":
+                        retRes.append(atom)
+        residue.atoms = retRes
+        return residue
 
