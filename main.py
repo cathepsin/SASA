@@ -198,7 +198,6 @@ if __name__ == '__main__':
                     print(len(si))
                     wHelper.insertMonomers(f"{os.path.basename(file)} coil {index}", len(si), sasa.SASA, monomerSASAs, monomerPcnt, len(cCoil.GetccAtoms()), monRes, outofcontext)
                     index += 1
-                #filewriter.writeFile()
             except:
                 print("An error in calculating the SASA for this protein")
             finally:
