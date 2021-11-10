@@ -1,7 +1,7 @@
-#Coiled-Coil SASA
+# Coiled-Coil SASA
 <hr>
 
-#Introduction
+# Introduction
 This script was originally made to quickly estimate the surface area of each individual monomer within a coiled coil.
 An updated and more general version of this script will be implemented in the
 [***apalib***](https://pypi.org/project/apalib/) python module.<br><br>
@@ -12,7 +12,7 @@ file, the surface area of each monomer within a coiled-coil can be obtained
 version 0.0.1
 <hr>
 
-#Installation
+# Installation
 This script uses the following modules. Install them as you would normally install a python module:
 - numpy
 - ntpath
@@ -24,7 +24,8 @@ Under special and extremely rare circumstances, the following may also need to b
 - sys
 - signal
 - os
-#Running Instructions
+
+# Running Instructions
 First, two environment variables must be set:<br>
 **SOLVENTRADIUS**: Set this to be the radius of your desired solvent.<br>
 **NUMFIBPOINTS**: Set this to be the number of fibonacci points to generate around each atom. A higher number
@@ -47,7 +48,7 @@ Note that this script can take up to a few minutes to run ***per protein***.<br>
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
-##Note
+## Note
 This program has been tested only enough to produce data for a single project. It cannot handle every protein
 (i.e. proteins containing a rotamer). A more robust form of this script will be included in the [***apalib***](https://pypi.org/project/apalib/)
 python module.
