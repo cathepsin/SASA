@@ -12,7 +12,6 @@ import ntpath
 import signal
 import FPTools as fpt
 import writerhelper
-import multiprocessing as mp
 
 if __name__ == '__main__':
 
